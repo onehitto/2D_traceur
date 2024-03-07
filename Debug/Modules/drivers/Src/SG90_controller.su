@@ -1,0 +1,5 @@
+SG90_controller.c:32:6:Servo_Init	16	static
+SG90_controller.c:55:19:Servo_Check_Operation	16	static
+SG90_controller.c:100:6:Servo_Goto	24	static
+SG90_controller.c:121:6:Servo_Start	16	static
+SG90_controller.c:141:6:Servo_Stop	16	static

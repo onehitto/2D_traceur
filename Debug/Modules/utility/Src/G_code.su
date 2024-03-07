@@ -1,0 +1,3 @@
+G_code.c:10:6:G_Code_Init	8	static
+G_code.c:16:6:G_Code_Execute_J	24	static
+G_code.c:31:9:ParseCmd_servo	16	static

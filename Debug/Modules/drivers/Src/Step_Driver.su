@@ -1,0 +1,3 @@
+Step_Driver.c:12:6:StM_Pin_Conf	16	static
+Step_Driver.c:56:6:StM_Conf_Init	16	static
+Step_Driver.c:70:6:GoToStep	24	static
