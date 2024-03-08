@@ -38,7 +38,7 @@ void Com_Transmit(){
 
 	while(Buf_IsEmpty(&Com_TXstorage) != BUF_EMPTY){
 		ptr = Buf_Dequeue(&Com_TXstorage);
-		while(CDC_Transmit_FS((uint8_t*) ptr->data, strlen(ptr->data)+1) == USBD_BUSY);
+		while(CDC_Transmit_FS((uint8_t*) ptr->data, strlen(ptr->data)+1) != USBD_OK);
 	}
 }
 
@@ -69,9 +69,13 @@ void Com_Receive(){
 	if (Buf_IsFull(&Com_RXstorage) != BUF_FULL && flag_data_received == 1 ){
 		memcpy(ptr.data,buffer,MAX_SIZE_MESSAGE);
 		flag_data_received = 0;
-		if (HAL_ERROR == Buf_Queue(&Com_RXstorage,&ptr))
-			while(CDC_Transmit_FS((uint8_t*) "nok\n", 4) == USBD_BUSY);
+		Buf_Queue(&Com_RXstorage,&ptr);
+
 	}
+	else if (Buf_IsFull(&Com_RXstorage) == BUF_FULL && flag_data_received == 1){
+				while(CDC_Transmit_FS((uint8_t*) "RX:Full\n", 8) != USBD_OK);
+				flag_data_received = 0;
+			}
 
 }
 

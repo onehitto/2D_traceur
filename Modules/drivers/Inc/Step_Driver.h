@@ -41,26 +41,35 @@ typedef struct{
 	uint8_t DIR;
 	uint8_t STEP;
 
-}step_Conf;
+}Step_Conf_t;
 
 typedef enum {
-	ST_ON = 0,
-	ST_OFF,
+	ST_OFF = 0,
+	ST_ORDER,
 }Step_Status_t;
 
 typedef struct{
 	Setup_Pins Pins;
-	step_Conf Conf;
+	Step_Conf_t Conf;
 	Step_Status_t Status;
-	uint16_t Steps_count;
-	uint16_t tar_steps;
+	volatile uint32_t Steps_count;
+	volatile uint32_t tar_steps;
 	uint8_t feed_rate;
 }Step_Driver_Handler;
+
+typedef enum {
+	ST_CLOCKWISE = 0,
+	ST_ANTICLOCKWISE,
+}Step_Direction_t;
+
+
+#define DIR_MOTOR_CLOCKWISE(Motor) HAL_GPIO_WritePin(Motor->Pins.port_DIR, Motor->Pins.pin_DIR, ST_CLOCKWISE);
+#define DIR_MOTOR_ST_ANTICLOCKWISE(Motor) HAL_GPIO_WritePin(Motor->Pins.port_DIR, Motor->Pins.pin_DIR, ST_ANTICLOCKWISE);
 
 void StM_Pin_Conf(Step_Driver_Handler * Motor1,Step_Driver_Handler * Motor2);
 void StM_Conf_Init(Step_Driver_Handler * Motor);
 void GoToStep(Step_Driver_Handler * Motor,uint16_t Step,uint8_t acc);
-
+void STM_Step(Step_Driver_Handler* Motor);
 
 
 

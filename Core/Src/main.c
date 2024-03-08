@@ -32,7 +32,7 @@ TIM_HandleTypeDef htim4;
 osThreadId defaultTaskHandle;
 osThreadId ComTaskHandle;
 osThreadId SpyTaskHandle;
-volatile uint32_t interruptCount = 0;
+uint32_t target = 0;
 /* Private variables 2D traceur ----------------------------------------------*/
 Servo_Handle_t servo;
 
@@ -222,9 +222,9 @@ static void MX_TIM4_Init(void)
 
   /* USER CODE END TIM4_Init 1 */
   htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 0;
+  htim4.Init.Prescaler = 64-1;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = 36000;
+  htim4.Init.Period = 11250;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
@@ -268,24 +268,24 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15|GPIO_PIN_13, GPIO_PIN_RESET);
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6
                           |GPIO_PIN_7|GPIO_PIN_12, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6
-                          |GPIO_PIN_7|GPIO_PIN_8|GPIO_PIN_9, GPIO_PIN_RESET);
+                          |GPIO_PIN_7|GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_3, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PC15 */
-  GPIO_InitStruct.Pin = GPIO_PIN_15;
+  GPIO_InitStruct.Pin = GPIO_PIN_15|GPIO_PIN_13;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PB3 */
-    GPIO_InitStruct.Pin = GPIO_PIN_15;
+  /*Configure GPIO pin : PB11 PB15 */
+    GPIO_InitStruct.Pin = GPIO_PIN_15|GPIO_PIN_11;
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -302,7 +302,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : PB15 PB4 PB5 PB6
                            PB7 PB8 PB9 */
-  GPIO_InitStruct.Pin = GPIO_PIN_15|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6
+  GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6
                           |GPIO_PIN_7|GPIO_PIN_8|GPIO_PIN_9;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -324,17 +324,18 @@ static void MX_GPIO_Init(void)
 /* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void const * argument)
 {
-  Data_t msg;
   uint8_t timflag = 0;
+  cnc_init();
 
   for(;;)
   {
 	  osDelay(20);
 	  if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15) == GPIO_PIN_RESET && timflag == 0){
+		  GoToStep(&Motor1,100,10);
+		  GoToStep(&Motor2,100,10);
 		  timflag = 1;
-		  	snprintf(msg.data,sizeof(msg.data),"<InfoServo>\n");
-		  	Com_Queue_msg(&msg);
-		  	HAL_TIM_Base_Start_IT(&htim4);
+		  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+		  HAL_TIM_Base_Start_IT(&htim4);
 		  }
 
 	  if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15) == GPIO_PIN_SET && timflag == 1){
@@ -359,7 +360,7 @@ void StartComTask(void const * argument){
 			osDelay(20);
 			Com_Transmit();
 			Com_Receive();
-			Com_Assign();
+			//Com_Assign();
 		}
 }
 
@@ -380,13 +381,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   if (htim->Instance == TIM4) {
-	  interruptCount++;
-	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_5);
-	  if (interruptCount == 10){
-	        HAL_TIM_Base_Stop(&htim4);
-	        interruptCount = 0;
+	  cnc_DriveM(&Motor1);
+	  cnc_DriveM(&Motor2);
+	  if (Motor1.Status == ST_OFF && Motor2.Status == ST_OFF)
+		  HAL_TIM_Base_Stop_IT(&htim4);
 	  }
-    }
+
   /* USER CODE BEGIN Callback 1 */
 
   /* USER CODE END Callback 1 */
