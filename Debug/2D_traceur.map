@@ -3085,44 +3085,44 @@ LOAD c:/st/stm32cubeide_1.0.2/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.exte
  .debug_ranges  0x0000000000001390       0x50 USB_DEVICE/App/usbd_desc.o
  .debug_ranges  0x00000000000013e0      0x108 USB_DEVICE/Target/usbd_conf.o
 
-.debug_line     0x0000000000000000    0x14a5b
+.debug_line     0x0000000000000000    0x14a58
  .debug_line    0x0000000000000000      0x330 Core/Src/freertos.o
- .debug_line    0x0000000000000330      0xa69 Core/Src/main.o
- .debug_line    0x0000000000000d99      0x36a Core/Src/stm32f1xx_hal_msp.o
- .debug_line    0x0000000000001103      0x35b Core/Src/stm32f1xx_hal_timebase_tim.o
- .debug_line    0x000000000000145e      0x3c2 Core/Src/stm32f1xx_it.o
- .debug_line    0x0000000000001820      0x32d Core/Src/system_stm32f1xx.o
- .debug_line    0x0000000000001b4d       0x86 Core/Startup/startup_stm32f103c8tx.o
- .debug_line    0x0000000000001bd3      0x562 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.o
- .debug_line    0x0000000000002135      0x742 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.o
- .debug_line    0x0000000000002877      0x613 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.o
- .debug_line    0x0000000000002e8a      0xfc0 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pcd.o
- .debug_line    0x0000000000003e4a      0x35d Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pcd_ex.o
- .debug_line    0x00000000000041a7      0x9c6 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.o
- .debug_line    0x0000000000004b6d      0x4d2 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.o
- .debug_line    0x000000000000503f     0x301e Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.o
- .debug_line    0x000000000000805d     0x150f Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.o
- .debug_line    0x000000000000956c      0xc0f Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_usb.o
- .debug_line    0x000000000000a17b      0x881 Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o
- .debug_line    0x000000000000a9fc      0x8ac Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o
- .debug_line    0x000000000000b2a8      0xacb Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o
- .debug_line    0x000000000000bd73      0x542 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o
- .debug_line    0x000000000000c2b5      0xf52 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.o
- .debug_line    0x000000000000d207      0x545 Middlewares/Third_Party/FreeRTOS/Source/list.o
- .debug_line    0x000000000000d74c     0x129e Middlewares/Third_Party/FreeRTOS/Source/queue.o
- .debug_line    0x000000000000e9ea     0x177c Middlewares/Third_Party/FreeRTOS/Source/tasks.o
- .debug_line    0x0000000000010166      0x537 Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3/port.o
- .debug_line    0x000000000001069d      0x6c0 Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.o
- .debug_line    0x0000000000010d5d      0x712 Modules/cnc_2d/Src/cnc_2d.o
- .debug_line    0x000000000001146f      0x45b Modules/drivers/Src/SG90_controller.o
- .debug_line    0x00000000000118ca      0x525 Modules/drivers/Src/Step_Driver.o
- .debug_line    0x0000000000011def      0x6c5 Modules/utility/Src/Com_api.o
- .debug_line    0x00000000000124b4      0x60f Modules/utility/Src/G_code.o
- .debug_line    0x0000000000012ac3      0x620 Modules/utility/Src/Queue_job_manager.o
- .debug_line    0x00000000000130e3      0x4f2 USB_DEVICE/App/usb_device.o
- .debug_line    0x00000000000135d5      0x55b USB_DEVICE/App/usbd_cdc_if.o
- .debug_line    0x0000000000013b30      0x5cb USB_DEVICE/App/usbd_desc.o
- .debug_line    0x00000000000140fb      0x960 USB_DEVICE/Target/usbd_conf.o
+ .debug_line    0x0000000000000330      0xa66 Core/Src/main.o
+ .debug_line    0x0000000000000d96      0x36a Core/Src/stm32f1xx_hal_msp.o
+ .debug_line    0x0000000000001100      0x35b Core/Src/stm32f1xx_hal_timebase_tim.o
+ .debug_line    0x000000000000145b      0x3c2 Core/Src/stm32f1xx_it.o
+ .debug_line    0x000000000000181d      0x32d Core/Src/system_stm32f1xx.o
+ .debug_line    0x0000000000001b4a       0x86 Core/Startup/startup_stm32f103c8tx.o
+ .debug_line    0x0000000000001bd0      0x562 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.o
+ .debug_line    0x0000000000002132      0x742 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.o
+ .debug_line    0x0000000000002874      0x613 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.o
+ .debug_line    0x0000000000002e87      0xfc0 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pcd.o
+ .debug_line    0x0000000000003e47      0x35d Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pcd_ex.o
+ .debug_line    0x00000000000041a4      0x9c6 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.o
+ .debug_line    0x0000000000004b6a      0x4d2 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.o
+ .debug_line    0x000000000000503c     0x301e Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.o
+ .debug_line    0x000000000000805a     0x150f Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.o
+ .debug_line    0x0000000000009569      0xc0f Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_usb.o
+ .debug_line    0x000000000000a178      0x881 Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o
+ .debug_line    0x000000000000a9f9      0x8ac Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o
+ .debug_line    0x000000000000b2a5      0xacb Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o
+ .debug_line    0x000000000000bd70      0x542 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o
+ .debug_line    0x000000000000c2b2      0xf52 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.o
+ .debug_line    0x000000000000d204      0x545 Middlewares/Third_Party/FreeRTOS/Source/list.o
+ .debug_line    0x000000000000d749     0x129e Middlewares/Third_Party/FreeRTOS/Source/queue.o
+ .debug_line    0x000000000000e9e7     0x177c Middlewares/Third_Party/FreeRTOS/Source/tasks.o
+ .debug_line    0x0000000000010163      0x537 Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3/port.o
+ .debug_line    0x000000000001069a      0x6c0 Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.o
+ .debug_line    0x0000000000010d5a      0x712 Modules/cnc_2d/Src/cnc_2d.o
+ .debug_line    0x000000000001146c      0x45b Modules/drivers/Src/SG90_controller.o
+ .debug_line    0x00000000000118c7      0x525 Modules/drivers/Src/Step_Driver.o
+ .debug_line    0x0000000000011dec      0x6c5 Modules/utility/Src/Com_api.o
+ .debug_line    0x00000000000124b1      0x60f Modules/utility/Src/G_code.o
+ .debug_line    0x0000000000012ac0      0x620 Modules/utility/Src/Queue_job_manager.o
+ .debug_line    0x00000000000130e0      0x4f2 USB_DEVICE/App/usb_device.o
+ .debug_line    0x00000000000135d2      0x55b USB_DEVICE/App/usbd_cdc_if.o
+ .debug_line    0x0000000000013b2d      0x5cb USB_DEVICE/App/usbd_desc.o
+ .debug_line    0x00000000000140f8      0x960 USB_DEVICE/Target/usbd_conf.o
 
 .debug_str      0x0000000000000000     0x6dd0
  .debug_str     0x0000000000000000      0x36e Core/Src/freertos.o

@@ -35,13 +35,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  15 .debug_ranges 000014e8  00000000  00000000  0004ced8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_line   00014a5b  00000000  00000000  0004e3c0  2**0
+ 16 .debug_line   00014a58  00000000  00000000  0004e3c0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_str    00006dd0  00000000  00000000  00062e1b  2**0
+ 17 .debug_str    00006dd0  00000000  00000000  00062e18  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .comment      00000053  00000000  00000000  00069beb  2**0
+ 18 .comment      00000053  00000000  00000000  00069be8  2**0
                   CONTENTS, READONLY
- 19 .debug_frame  00005d20  00000000  00000000  00069c40  2**2
+ 19 .debug_frame  00005d20  00000000  00000000  00069c3c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -524,17 +524,17 @@ static void MX_TIM4_Init(void)
  80003e4:	4b1d      	ldr	r3, [pc, #116]	; (800045c <MX_TIM4_Init+0x94>)
  80003e6:	4a1e      	ldr	r2, [pc, #120]	; (8000460 <MX_TIM4_Init+0x98>)
  80003e8:	601a      	str	r2, [r3, #0]
-  htim4.Init.Prescaler = 64-1;
+  htim4.Init.Prescaler = 8-1;//64-1;
  80003ea:	4b1c      	ldr	r3, [pc, #112]	; (800045c <MX_TIM4_Init+0x94>)
- 80003ec:	223f      	movs	r2, #63	; 0x3f
+ 80003ec:	2207      	movs	r2, #7
  80003ee:	605a      	str	r2, [r3, #4]
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
  80003f0:	4b1a      	ldr	r3, [pc, #104]	; (800045c <MX_TIM4_Init+0x94>)
  80003f2:	2200      	movs	r2, #0
  80003f4:	609a      	str	r2, [r3, #8]
-  htim4.Init.Period = 11250;
+  htim4.Init.Period = 9000;//11250;
  80003f6:	4b19      	ldr	r3, [pc, #100]	; (800045c <MX_TIM4_Init+0x94>)
- 80003f8:	f642 32f2 	movw	r2, #11250	; 0x2bf2
+ 80003f8:	f242 3228 	movw	r2, #9000	; 0x2328
  80003fc:	60da      	str	r2, [r3, #12]
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
  80003fe:	4b17      	ldr	r3, [pc, #92]	; (800045c <MX_TIM4_Init+0x94>)
@@ -799,56 +799,56 @@ void StartDefaultTask(void const * argument)
 
   for(;;)
   {
-	  osDelay(20);
- 800059c:	2014      	movs	r0, #20
- 800059e:	f007 fbc8 	bl	8007d32 <osDelay>
+
 	  if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15) == GPIO_PIN_RESET && timflag == 0){
- 80005a2:	f44f 4100 	mov.w	r1, #32768	; 0x8000
- 80005a6:	4815      	ldr	r0, [pc, #84]	; (80005fc <StartDefaultTask+0x70>)
- 80005a8:	f000 fc88 	bl	8000ebc <HAL_GPIO_ReadPin>
- 80005ac:	4603      	mov	r3, r0
+ 800059c:	f44f 4100 	mov.w	r1, #32768	; 0x8000
+ 80005a0:	4816      	ldr	r0, [pc, #88]	; (80005fc <StartDefaultTask+0x70>)
+ 80005a2:	f000 fc8b 	bl	8000ebc <HAL_GPIO_ReadPin>
+ 80005a6:	4603      	mov	r3, r0
+ 80005a8:	2b00      	cmp	r3, #0
+ 80005aa:	d118      	bne.n	80005de <StartDefaultTask+0x52>
+ 80005ac:	7bfb      	ldrb	r3, [r7, #15]
  80005ae:	2b00      	cmp	r3, #0
- 80005b0:	d116      	bne.n	80005e0 <StartDefaultTask+0x54>
- 80005b2:	7bfb      	ldrb	r3, [r7, #15]
- 80005b4:	2b00      	cmp	r3, #0
- 80005b6:	d113      	bne.n	80005e0 <StartDefaultTask+0x54>
-		  GoToStep(&Motor1,100,10);
- 80005b8:	220a      	movs	r2, #10
- 80005ba:	2164      	movs	r1, #100	; 0x64
- 80005bc:	4810      	ldr	r0, [pc, #64]	; (8000600 <StartDefaultTask+0x74>)
- 80005be:	f009 fd7f 	bl	800a0c0 <GoToStep>
-		  GoToStep(&Motor2,100,10);
- 80005c2:	220a      	movs	r2, #10
- 80005c4:	2164      	movs	r1, #100	; 0x64
- 80005c6:	480f      	ldr	r0, [pc, #60]	; (8000604 <StartDefaultTask+0x78>)
- 80005c8:	f009 fd7a 	bl	800a0c0 <GoToStep>
+ 80005b0:	d115      	bne.n	80005de <StartDefaultTask+0x52>
+		  GoToStep(&Motor1,1000,10);
+ 80005b2:	220a      	movs	r2, #10
+ 80005b4:	f44f 717a 	mov.w	r1, #1000	; 0x3e8
+ 80005b8:	4811      	ldr	r0, [pc, #68]	; (8000600 <StartDefaultTask+0x74>)
+ 80005ba:	f009 fd81 	bl	800a0c0 <GoToStep>
+		  GoToStep(&Motor2,1000,10);
+ 80005be:	220a      	movs	r2, #10
+ 80005c0:	f44f 717a 	mov.w	r1, #1000	; 0x3e8
+ 80005c4:	480f      	ldr	r0, [pc, #60]	; (8000604 <StartDefaultTask+0x78>)
+ 80005c6:	f009 fd7b 	bl	800a0c0 <GoToStep>
+
 		  timflag = 1;
- 80005cc:	2301      	movs	r3, #1
- 80005ce:	73fb      	strb	r3, [r7, #15]
+ 80005ca:	2301      	movs	r3, #1
+ 80005cc:	73fb      	strb	r3, [r7, #15]
 		  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
- 80005d0:	f44f 5100 	mov.w	r1, #8192	; 0x2000
- 80005d4:	480c      	ldr	r0, [pc, #48]	; (8000608 <StartDefaultTask+0x7c>)
- 80005d6:	f000 fca0 	bl	8000f1a <HAL_GPIO_TogglePin>
+ 80005ce:	f44f 5100 	mov.w	r1, #8192	; 0x2000
+ 80005d2:	480d      	ldr	r0, [pc, #52]	; (8000608 <StartDefaultTask+0x7c>)
+ 80005d4:	f000 fca1 	bl	8000f1a <HAL_GPIO_TogglePin>
 		  HAL_TIM_Base_Start_IT(&htim4);
- 80005da:	480c      	ldr	r0, [pc, #48]	; (800060c <StartDefaultTask+0x80>)
- 80005dc:	f002 ff56 	bl	800348c <HAL_TIM_Base_Start_IT>
+ 80005d8:	480c      	ldr	r0, [pc, #48]	; (800060c <StartDefaultTask+0x80>)
+ 80005da:	f002 ff57 	bl	800348c <HAL_TIM_Base_Start_IT>
 		  }
 
 	  if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15) == GPIO_PIN_SET && timflag == 1){
- 80005e0:	f44f 4100 	mov.w	r1, #32768	; 0x8000
- 80005e4:	4805      	ldr	r0, [pc, #20]	; (80005fc <StartDefaultTask+0x70>)
- 80005e6:	f000 fc69 	bl	8000ebc <HAL_GPIO_ReadPin>
- 80005ea:	4603      	mov	r3, r0
- 80005ec:	2b01      	cmp	r3, #1
- 80005ee:	d1d5      	bne.n	800059c <StartDefaultTask+0x10>
- 80005f0:	7bfb      	ldrb	r3, [r7, #15]
- 80005f2:	2b01      	cmp	r3, #1
- 80005f4:	d1d2      	bne.n	800059c <StartDefaultTask+0x10>
+ 80005de:	f44f 4100 	mov.w	r1, #32768	; 0x8000
+ 80005e2:	4806      	ldr	r0, [pc, #24]	; (80005fc <StartDefaultTask+0x70>)
+ 80005e4:	f000 fc6a 	bl	8000ebc <HAL_GPIO_ReadPin>
+ 80005e8:	4603      	mov	r3, r0
+ 80005ea:	2b01      	cmp	r3, #1
+ 80005ec:	d1d6      	bne.n	800059c <StartDefaultTask+0x10>
+ 80005ee:	7bfb      	ldrb	r3, [r7, #15]
+ 80005f0:	2b01      	cmp	r3, #1
+ 80005f2:	d1d3      	bne.n	800059c <StartDefaultTask+0x10>
 	  		  timflag = 0;
- 80005f6:	2300      	movs	r3, #0
- 80005f8:	73fb      	strb	r3, [r7, #15]
-	  osDelay(20);
- 80005fa:	e7cf      	b.n	800059c <StartDefaultTask+0x10>
+ 80005f4:	2300      	movs	r3, #0
+ 80005f6:	73fb      	strb	r3, [r7, #15]
+	  if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15) == GPIO_PIN_RESET && timflag == 0){
+ 80005f8:	e7d0      	b.n	800059c <StartDefaultTask+0x10>
+ 80005fa:	bf00      	nop
  80005fc:	40010c00 	.word	0x40010c00
  8000600:	200026d0 	.word	0x200026d0
  8000604:	20002100 	.word	0x20002100
