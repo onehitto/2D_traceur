@@ -29,7 +29,7 @@ void cnc_init(void){
 	Motor2.tar_steps = 0;
 	Motor2.Steps_count = 0;
 
-	StM_Pin_Conf(&Motor1,&Motor2);
+	StM_Pin_Conf_v2(&Motor1,&Motor2);
 	StM_Conf_Init(&Motor1);
 	StM_Conf_Init(&Motor2);
 }

@@ -115,8 +115,10 @@ void StM_Conf_Init(Step_Driver_Handler * Motor){
 }
 void GoToStep(Step_Driver_Handler * Motor,uint16_t tar_Step,uint8_t acc)
 {
-	Motor->Status = ST_ORDER;
-	Motor->tar_steps = tar_Step;
+	if (Motor->Status == ST_OFF){
+		Motor->Status = ST_ORDER;
+		Motor->tar_steps = tar_Step;
+	}
 }
 
 void STM_Step(Step_Driver_Handler* Motor){

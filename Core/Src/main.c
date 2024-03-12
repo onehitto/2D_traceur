@@ -325,23 +325,72 @@ static void MX_GPIO_Init(void)
 void StartDefaultTask(void const * argument)
 {
   uint8_t timflag = 0;
+  uint8_t test = 0;
+  uint8_t steptoggle = 1;
   cnc_init();
 
   for(;;)
   {
 
-	  if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15) == GPIO_PIN_RESET && timflag == 0){
-		  GoToStep(&Motor1,1000,10);
-		  GoToStep(&Motor2,1000,10);
+	  if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == GPIO_PIN_RESET && timflag == 0){
 
 		  timflag = 1;
-		  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-		  HAL_TIM_Base_Start_IT(&htim4);
+		  steptoggle = 0;
+		  test++ ;
 		  }
 
-	  if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15) == GPIO_PIN_SET && timflag == 1){
+	  if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == GPIO_PIN_SET && timflag == 1){
 	  		  timflag = 0;
 	  		  }
+
+	  if (test == 1 && steptoggle == 0 && Motor1.Status == ST_OFF && Motor2.Status == ST_OFF){
+		  Motor1.Conf.DIR = 1;
+		  Motor2.Conf.DIR = 0;
+		  StM_Conf_Init(&Motor1);
+		  StM_Conf_Init(&Motor2);
+
+		  GoToStep(&Motor1,100,10);
+		  GoToStep(&Motor2,100,10);
+		  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+		  HAL_TIM_Base_Start_IT(&htim4);
+		  steptoggle = 1;
+	  }else if (test == 2 && steptoggle == 0 && Motor1.Status == ST_OFF && Motor2.Status == ST_OFF){
+		  Motor1.Conf.DIR = 0;
+		  Motor2.Conf.DIR = 1;
+		  StM_Conf_Init(&Motor1);
+		  StM_Conf_Init(&Motor2);
+
+		  GoToStep(&Motor1,100,10);
+		  GoToStep(&Motor2,100,10);
+		  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+		  HAL_TIM_Base_Start_IT(&htim4);
+		  steptoggle = 1;
+	  }else if (test == 3 && steptoggle == 0 && Motor1.Status == ST_OFF && Motor2.Status == ST_OFF){
+		  Motor1.Conf.DIR = 0;
+		  Motor2.Conf.DIR = 0;
+		  StM_Conf_Init(&Motor1);
+		  StM_Conf_Init(&Motor2);
+
+		  GoToStep(&Motor1,100,10);
+		  GoToStep(&Motor2,100,10);
+		  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+		  HAL_TIM_Base_Start_IT(&htim4);
+		  steptoggle = 1;
+	  }else if (test == 4 && steptoggle == 0 && Motor1.Status == ST_OFF && Motor2.Status == ST_OFF){
+
+		  Motor1.Conf.DIR = 1;
+		  Motor2.Conf.DIR = 1;
+		  StM_Conf_Init(&Motor1);
+		  StM_Conf_Init(&Motor2);
+
+		  GoToStep(&Motor1,100,10);
+		  GoToStep(&Motor2,100,10);
+		  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+		  HAL_TIM_Base_Start_IT(&htim4);
+		  steptoggle = 1;
+	  }else if (test == 5) {
+		  test = 0;
+	  }
 
   }
   /* USER CODE END 5 */
@@ -358,6 +407,7 @@ void StartComTask(void const * argument){
 
 	for(;;)
 	  {
+
 			osDelay(20);
 			Com_Transmit();
 			Com_Receive();
