@@ -1,7 +1,0 @@
-Queue_job_manager.c:24:6:Buf_Init	24	static
-Queue_job_manager.c:49:19:Buf_Queue	16	static
-Queue_job_manager.c:76:9:Buf_Dequeue	16	static
-Queue_job_manager.c:101:14:Buf_IsFull	16	static
-Queue_job_manager.c:114:14:Buf_IsEmpty	16	static
-Queue_job_manager.c:127:9:Buf_Size	24	static
-Queue_job_manager.c:150:9:Buf_Peek	16	static
