@@ -1,6 +1,6 @@
 Modules/utility/Src/G_code.o: ../Modules/utility/Src/G_code.c \
- C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/utility/Inc/G_code.h \
- C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/utility/Inc/Queue_job_manager.h \
+ C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/utility/Inc/G_code.h \
+ C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/utility/Inc/Queue_job_manager.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
  ../Core/Inc/stm32f1xx_hal_conf.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h \
@@ -45,11 +45,11 @@ Modules/utility/Src/G_code.o: ../Modules/utility/Src/G_code.c \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/drivers/Inc/SG90_controller.h
+ C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/drivers/Inc/SG90_controller.h
 
-C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/utility/Inc/G_code.h:
+C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/utility/Inc/G_code.h:
 
-C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/utility/Inc/Queue_job_manager.h:
+C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/utility/Inc/Queue_job_manager.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
 
@@ -139,4 +139,4 @@ C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/
 
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
 
-C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/drivers/Inc/SG90_controller.h:
+C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/drivers/Inc/SG90_controller.h:

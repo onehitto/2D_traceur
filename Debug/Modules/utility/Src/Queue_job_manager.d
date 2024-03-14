@@ -1,6 +1,6 @@
 Modules/utility/Src/Queue_job_manager.o: \
  ../Modules/utility/Src/Queue_job_manager.c \
- C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/utility/Inc/Queue_job_manager.h \
+ C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/utility/Inc/Queue_job_manager.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
  ../Core/Inc/stm32f1xx_hal_conf.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h \
@@ -46,7 +46,7 @@ Modules/utility/Src/Queue_job_manager.o: \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
 
-C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/utility/Inc/Queue_job_manager.h:
+C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/utility/Inc/Queue_job_manager.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
 

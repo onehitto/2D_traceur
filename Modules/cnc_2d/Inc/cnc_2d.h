@@ -21,7 +21,9 @@
 Step_Driver_Handler Motor1;
 Step_Driver_Handler Motor2;
 
-void cnc_init(void);
+Servo_Handle_t servo;
+
+void cnc_init(TIM_HandleTypeDef* htim);
 void StM_Pin_Conf(Step_Driver_Handler * Motor1,Step_Driver_Handler * Motor2);
 void StM_Pin_Conf_v2(Step_Driver_Handler * Motor1,Step_Driver_Handler * Motor2);
 void cnc_DriveM(Step_Driver_Handler* Motor);

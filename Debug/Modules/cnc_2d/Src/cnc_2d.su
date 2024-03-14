@@ -1,2 +1,2 @@
-cnc_2d.c:12:6:cnc_init	8	static
-cnc_2d.c:38:6:cnc_DriveM	16	static
+cnc_2d.c:12:6:cnc_init	16	static
+cnc_2d.c:44:6:cnc_DriveM	16	static

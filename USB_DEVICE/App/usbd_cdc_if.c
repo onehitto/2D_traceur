@@ -108,8 +108,8 @@ uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
   */
 
 extern USBD_HandleTypeDef hUsbDeviceFS;
-uint8_t buffer [64];
-uint8_t flag_data_received;
+extern QueueHandle_t queueUSBtoCom;
+extern uint32_t errortosendqueue;
 
 /* USER CODE BEGIN EXPORTED_VARIABLES */
 
@@ -266,13 +266,18 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
 
-  uint32_t len = *Len;
-  if (flag_data_received == 0){
-		flag_data_received = 1 ;
-		memset(buffer,'\0',64);
-		memcpy(buffer,Buf,len);
-		memset(Buf,'\0',len);
+  // create a buffer of 64 to transmit only 64 char
+  uint8_t buffer [64];
+  memset(buffer,'\0',64);
+  memcpy(buffer,Buf,*Len);
+
+  if(xQueueSendFromISR(queueUSBtoCom, buffer, NULL) != pdPASS)
+  {
+	  // Handle error: Failed to send data
+	  errortosendqueue ++;
   }
+
+  memset(Buf,'\0',*Len);
 
 
   return (USBD_OK);

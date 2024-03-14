@@ -1,5 +1,5 @@
-Com_api.c:23:6:Com_Init	8	static
+Com_api.c:21:6:Com_Init	8	static
 Com_api.c:36:6:Com_Transmit	24	static
 Com_api.c:51:19:Com_Queue_msg	16	static
-Com_api.c:66:6:Com_Receive	96	static
-Com_api.c:88:6:Com_Assign	16	static
+Com_api.c:66:6:Com_Receive	280	static
+Com_api.c:112:6:Com_Assign	16	static

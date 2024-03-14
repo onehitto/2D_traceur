@@ -10,8 +10,6 @@
 #include "Com_api.h"
 
 
-uint8_t buffer [64];
-uint8_t flag_data_received = 0;
 
 
 /**************************************************************************
@@ -21,9 +19,11 @@ uint8_t flag_data_received = 0;
  *
  **************************************************************************/
 void Com_Init(){
+
+	// init the Queue that transfer data from usb isr to the com
+	queueUSBtoCom = xQueueCreate(10, 64 * sizeof(uint8_t));
+
 	Buf_Init(&Com_TXstorage) ;
-	Buf_Init(&Com_RXstorage) ;
-	memset(buffer,'\0',64);
 	MX_USB_DEVICE_Init();
 }
 
@@ -65,7 +65,31 @@ HAL_StatusTypeDef Com_Queue_msg(Data_t * msg){
  **************************************************************************/
 void Com_Receive(){
 	Data_t ptr;
+	Data_t msg = {.data = "cmd test",.id = 0 , .state = 0};
+	Data_t msg1 = {.data = "cmd G code",.id = 0 , .state = 0};
+	Data_t msg2 = {.data = "cmd execute code",.id = 0 , .state = 0};
+	//if (strncmp((char*)buffer, "up:01", 6) == 0)
+	//	flag_data_received = 0;
+	while (pdPASS == xQueueReceive( queueUSBtoCom, &ptr.data, 0 )){
+		// check if the msg is request of info
+		if (strncmp((char*)ptr.data, "cmd:info", 8) == 0){
 
+			Com_Queue_msg(&msg);
+		}// check if the msg is a G code "Start with G"
+		else if (strncmp((char*)ptr.data, "G", 1) == 0){
+			Com_Queue_msg(&msg1);
+		}// check if the msg is a execute code "Start with cmd"
+		else if (strncmp((char*)ptr.data, "cmd:move", 7) == 0){
+			Com_Queue_msg(&msg2);
+		}// check if the msg is to apply a conf
+		else if (strncmp((char*)ptr.data, "conf:", 5) == 0){
+			Com_Queue_msg(&msg2);
+		}else{
+
+		}
+
+	}
+	/*
 	if (Buf_IsFull(&Com_RXstorage) != BUF_FULL && flag_data_received == 1 ){
 		memcpy(ptr.data,buffer,MAX_SIZE_MESSAGE);
 		flag_data_received = 0;
@@ -76,7 +100,7 @@ void Com_Receive(){
 				while(CDC_Transmit_FS((uint8_t*) "RX:Full\n", 8) != USBD_OK);
 				flag_data_received = 0;
 			}
-
+	*/
 }
 
 /**************************************************************************
@@ -93,3 +117,5 @@ void Com_Assign(){
 			Queue_Job(ptr);
 		}
 }
+
+

@@ -1,5 +1,5 @@
 Modules/drivers/Src/Step_Driver.o: ../Modules/drivers/Src/Step_Driver.c \
- C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/drivers/Inc/Step_Driver.h \
+ C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/drivers/Inc/Step_Driver.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
  ../Core/Inc/stm32f1xx_hal_conf.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h \
@@ -45,7 +45,7 @@ Modules/drivers/Src/Step_Driver.o: ../Modules/drivers/Src/Step_Driver.c \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
 
-C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/drivers/Inc/Step_Driver.h:
+C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/drivers/Inc/Step_Driver.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
 

@@ -31,10 +31,9 @@ TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim4;
 osThreadId defaultTaskHandle;
 osThreadId ComTaskHandle;
-osThreadId SpyTaskHandle;
-uint32_t target = 0;
+
 /* Private variables 2D traceur ----------------------------------------------*/
-Servo_Handle_t servo;
+
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -73,7 +72,7 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_QUEUES */
   Com_Init();
-  Servo_Init(&servo, &htim2);
+  cnc_init(&htim2);
   G_Code_Init();
   /* USER CODE END RTOS_QUEUES */
   HAL_Delay(10);
@@ -324,14 +323,14 @@ static void MX_GPIO_Init(void)
 /* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void const * argument)
 {
-  uint8_t timflag = 0;
-  uint8_t test = 0;
-  uint8_t steptoggle = 1;
-  cnc_init();
+  //uint8_t timflag = 0;
+  //uint8_t test = 0;
+  //uint8_t steptoggle = 1;
+
 
   for(;;)
   {
-
+	  /*
 	  if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == GPIO_PIN_RESET && timflag == 0){
 
 		  timflag = 1;
@@ -391,7 +390,8 @@ void StartDefaultTask(void const * argument)
 	  }else if (test == 5) {
 		  test = 0;
 	  }
-
+	*/
+	osDelay(10);
   }
   /* USER CODE END 5 */
 }
@@ -408,7 +408,7 @@ void StartComTask(void const * argument){
 	for(;;)
 	  {
 
-			osDelay(20);
+			osDelay(5);
 			Com_Transmit();
 			Com_Receive();
 			//Com_Assign();

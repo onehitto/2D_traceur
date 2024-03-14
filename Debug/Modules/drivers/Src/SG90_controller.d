@@ -1,6 +1,6 @@
 Modules/drivers/Src/SG90_controller.o: \
  ../Modules/drivers/Src/SG90_controller.c \
- C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/drivers/Inc/SG90_controller.h \
+ C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/drivers/Inc/SG90_controller.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
  ../Core/Inc/stm32f1xx_hal_conf.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h \
@@ -46,7 +46,7 @@ Modules/drivers/Src/SG90_controller.o: \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
 
-C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/drivers/Inc/SG90_controller.h:
+C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/drivers/Inc/SG90_controller.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
 

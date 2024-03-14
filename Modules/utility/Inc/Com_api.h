@@ -27,8 +27,8 @@
 
 Buf_Handler_t Com_TXstorage;
 Buf_Handler_t Com_RXstorage;
-extern uint8_t buffer [64];
-extern uint8_t flag_data_received;
+QueueHandle_t queueUSBtoCom;
+uint32_t errortosendqueue;
 /*
  * Prototype fnc
  */
@@ -37,6 +37,12 @@ HAL_StatusTypeDef Com_Queue_msg(Data_t * msg);
 void Com_Transmit();
 void Com_Receive();
 void Com_Assign();
+
+
+
+/*
+ * utility
+ */
 
 
 

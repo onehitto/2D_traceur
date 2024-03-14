@@ -1,6 +1,6 @@
 Modules/cnc_2d/Src/cnc_2d.o: ../Modules/cnc_2d/Src/cnc_2d.c \
- C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/cnc_2d/Inc/cnc_2d.h \
- C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/drivers/Inc/SG90_controller.h \
+ C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/cnc_2d/Inc/cnc_2d.h \
+ C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/drivers/Inc/SG90_controller.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
  ../Core/Inc/stm32f1xx_hal_conf.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h \
@@ -45,8 +45,8 @@ Modules/cnc_2d/Src/cnc_2d.o: ../Modules/cnc_2d/Src/cnc_2d.c \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/drivers/Inc/Spy.h \
- C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/utility/Inc/Com_api.h \
+ C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/drivers/Inc/Spy.h \
+ C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/utility/Inc/Com_api.h \
  ../USB_DEVICE/App/usb_device.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h \
  ../USB_DEVICE/Target/usbd_conf.h ../Core/Inc/main.h \
@@ -57,16 +57,16 @@ Modules/cnc_2d/Src/cnc_2d.o: ../Modules/cnc_2d/Src/cnc_2d.c \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h \
- C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/utility/Inc/G_code.h \
- C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/utility/Inc/Queue_job_manager.h \
- C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/utility/Inc/G_code.h \
- C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/drivers/Inc/SG90_controller.h \
- C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/drivers/Inc/Step_Driver.h \
- C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/utility/Inc/Queue_job_manager.h
+ C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/utility/Inc/G_code.h \
+ C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/utility/Inc/Queue_job_manager.h \
+ C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/utility/Inc/G_code.h \
+ C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/drivers/Inc/SG90_controller.h \
+ C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/drivers/Inc/Step_Driver.h \
+ C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/utility/Inc/Queue_job_manager.h
 
-C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/cnc_2d/Inc/cnc_2d.h:
+C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/cnc_2d/Inc/cnc_2d.h:
 
-C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/drivers/Inc/SG90_controller.h:
+C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/drivers/Inc/SG90_controller.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
 
@@ -156,9 +156,9 @@ C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/
 
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
 
-C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/drivers/Inc/Spy.h:
+C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/drivers/Inc/Spy.h:
 
-C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/utility/Inc/Com_api.h:
+C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/utility/Inc/Com_api.h:
 
 ../USB_DEVICE/App/usb_device.h:
 
@@ -182,14 +182,14 @@ C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/
 
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h:
 
-C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/utility/Inc/G_code.h:
+C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/utility/Inc/G_code.h:
 
-C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/utility/Inc/Queue_job_manager.h:
+C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/utility/Inc/Queue_job_manager.h:
 
-C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/utility/Inc/G_code.h:
+C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/utility/Inc/G_code.h:
 
-C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/drivers/Inc/SG90_controller.h:
+C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/drivers/Inc/SG90_controller.h:
 
-C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/drivers/Inc/Step_Driver.h:
+C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/drivers/Inc/Step_Driver.h:
 
-C:/Users/soufi/OneDrive/projects/2D\ Traceur/Design\ System/Software/2D_traceur/Modules/utility/Inc/Queue_job_manager.h:
+C:/Users/BOUHROUZ\ FADOUA/Documents/stm_projects/2D_traceur/Modules/utility/Inc/Queue_job_manager.h:

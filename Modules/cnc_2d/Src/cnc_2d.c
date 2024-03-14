@@ -9,7 +9,7 @@
 
 
 
-void cnc_init(void){
+void cnc_init(TIM_HandleTypeDef* htim){
 
 	Motor1.Conf.ENB = 0;
 	Motor1.Conf.MS1 = 0;
@@ -29,9 +29,15 @@ void cnc_init(void){
 	Motor2.tar_steps = 0;
 	Motor2.Steps_count = 0;
 
+	//Configured the pins for m1 & m2
 	StM_Pin_Conf_v2(&Motor1,&Motor2);
+
+	// initialize m1 & m2
 	StM_Conf_Init(&Motor1);
 	StM_Conf_Init(&Motor2);
+
+	// init the servo motor , attach it to htim
+	Servo_Init(&servo, htim);
 }
 
 

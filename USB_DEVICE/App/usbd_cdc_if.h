@@ -29,6 +29,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_cdc.h"
+#include "FreeRTOS.h"
+#include "queue.h"
 
 /* USER CODE BEGIN INCLUDE */
 
