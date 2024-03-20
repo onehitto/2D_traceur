@@ -5,3 +5,6 @@
 *.elf
 
 Debug/
+debug0/
+Release/
+

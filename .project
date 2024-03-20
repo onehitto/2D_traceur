@@ -3,6 +3,7 @@
 	<name>2D_traceur</name>
 	<comment></comment>
 	<projects>
+		<project>2D_traceur</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -11,6 +11,11 @@
 
 
 
+Buf_Handler_t Com_TXstorage;
+Buf_Handler_t Com_RXstorage;
+QueueHandle_t queueUSBtoCom;
+uint32_t errortosendqueue;
+
 
 /**************************************************************************
  * @fn					- Com_Init
@@ -65,25 +70,24 @@ HAL_StatusTypeDef Com_Queue_msg(Data_t * msg){
  **************************************************************************/
 void Com_Receive(){
 	Data_t ptr;
-	Data_t msg = {.data = "cmd test",.id = 0 , .state = 0};
-	Data_t msg1 = {.data = "cmd G code",.id = 0 , .state = 0};
-	Data_t msg2 = {.data = "cmd execute code",.id = 0 , .state = 0};
+	Data_t conf_ack = {.data = "Configuration Received",.id = 0 , .state = 0};
+	Data_t G_ack = {.data = "G code Received",.id = 0 , .state = 0};
+	Data_t cmd_ack = {.data = "Command Received",.id = 0 , .state = 0};
 	//if (strncmp((char*)buffer, "up:01", 6) == 0)
 	//	flag_data_received = 0;
 	while (pdPASS == xQueueReceive( queueUSBtoCom, &ptr.data, 0 )){
 		// check if the msg is request of info
-		if (strncmp((char*)ptr.data, "cmd:info", 8) == 0){
-
-			Com_Queue_msg(&msg);
+		if (strncmp((char*)ptr.data, "info", 4) == 0){
+			Spycnc();
 		}// check if the msg is a G code "Start with G"
 		else if (strncmp((char*)ptr.data, "G", 1) == 0){
-			Com_Queue_msg(&msg1);
+			Com_Queue_msg(&G_ack);
 		}// check if the msg is a execute code "Start with cmd"
-		else if (strncmp((char*)ptr.data, "cmd:move", 7) == 0){
-			Com_Queue_msg(&msg2);
+		else if (strncmp((char*)ptr.data, "cmd:", 4) == 0){
+			CmdMove(ptr);
 		}// check if the msg is to apply a conf
 		else if (strncmp((char*)ptr.data, "conf:", 5) == 0){
-			Com_Queue_msg(&msg2);
+			ApplyConf(ptr);
 		}else{
 
 		}

@@ -72,7 +72,7 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_QUEUES */
   Com_Init();
-  cnc_init(&htim2);
+  cnc_init(&htim2,&htim4);
   G_Code_Init();
   /* USER CODE END RTOS_QUEUES */
   HAL_Delay(10);
@@ -432,8 +432,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   if (htim->Instance == TIM4) {
-	  cnc_DriveM(&Motor1);
-	  cnc_DriveM(&Motor2);
+	  cnc_DriveM_TIMcallback(&Motor1);
+	  cnc_DriveM_TIMcallback(&Motor2);
 	  if (Motor1.Status == ST_OFF && Motor2.Status == ST_OFF)
 		  HAL_TIM_Base_Stop_IT(&htim4);
 	  }

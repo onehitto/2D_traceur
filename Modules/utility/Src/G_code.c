@@ -7,6 +7,12 @@
 
 #include "G_code.h"
 
+
+Buf_Handler_t Job_Stack;
+Buf_Handler_t Gcode_Stack;
+
+
+
 void G_Code_Init(){
 	Buf_Init(&Job_Stack);
 	Buf_Init(&Gcode_Stack);

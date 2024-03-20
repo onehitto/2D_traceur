@@ -19,8 +19,8 @@
 
 
 
-Buf_Handler_t Job_Stack;
-Buf_Handler_t Gcode_Stack;
+extern Buf_Handler_t Job_Stack;
+extern Buf_Handler_t Gcode_Stack;
 
 
 void G_Code_Init();

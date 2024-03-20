@@ -50,10 +50,11 @@ typedef enum {
 
 typedef struct{
 	Setup_Pins Pins;
-	Step_Conf_t Conf;
+	volatile Step_Conf_t Conf;
 	Step_Status_t Status;
 	volatile uint32_t Steps_count;
 	volatile uint32_t tar_steps;
+	volatile int32_t num_steps;
 	uint8_t feed_rate;
 }Step_Driver_Handler;
 
@@ -68,6 +69,7 @@ typedef enum {
 
 void StM_Pin_Conf(Step_Driver_Handler * Motor1,Step_Driver_Handler * Motor2);
 void StM_Conf_Init(Step_Driver_Handler * Motor);
+void StM_Conf_Dir(Step_Driver_Handler * Motor);
 void GoToStep(Step_Driver_Handler * Motor,uint16_t Step,uint8_t acc);
 void STM_Step(Step_Driver_Handler* Motor);
 

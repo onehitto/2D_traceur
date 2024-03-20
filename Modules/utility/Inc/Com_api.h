@@ -12,7 +12,7 @@
 #include <string.h>
 #include "usb_device.h"
 #include "usbd_cdc_if.h"
-
+#include "cnc_2d.h"
 #include "G_code.h"
 
 /*
@@ -25,10 +25,10 @@
  * def
  */
 
-Buf_Handler_t Com_TXstorage;
-Buf_Handler_t Com_RXstorage;
-QueueHandle_t queueUSBtoCom;
-uint32_t errortosendqueue;
+extern Buf_Handler_t Com_TXstorage;
+extern Buf_Handler_t Com_RXstorage;
+extern QueueHandle_t queueUSBtoCom;
+extern uint32_t errortosendqueue;
 /*
  * Prototype fnc
  */
