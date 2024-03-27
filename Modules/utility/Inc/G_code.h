@@ -12,22 +12,38 @@
 #include <stdlib.h>
 #include "Queue_job_manager.h"
 #include "SG90_controller.h"
+#include "Com_api.h"
+#include <math.h>
+
+typedef enum
+{
+  RUNNING       = 0x00U,
+  PENDING,
+  STOPED
+}G_Status_t;
+
+typedef struct{
+	float x,y,i,j;
+}Pos_t;
+
+#define QUEUE_G_CODE(X) Buf_Queue(&Gcode_Stack,X)
+#define DEQUEUE_G_CODE(X) Buf_Dequeue(&Gcode_Stack,X)
 
 
-#define Queue_Job(x) Buf_Queue(&Job_Stack,x)
-#define Queue_Gcode(x) Buf_Queue(&Gcode_Stack,x)
-
-
-
-extern Buf_Handler_t Job_Stack;
 extern Buf_Handler_t Gcode_Stack;
 
 
 void G_Code_Init();
-void G_Code_Execute_G();
-void G_Code_Execute_J(Servo_Handle_t* servo);
-uint8_t ParseCmd_servo(const char* cmd, uint8_t *angle );
 
+
+//parsers
+void GCode_Parser(Data_t* G_Code);
+void G1_Parser(Data_t* G_Code);
+
+//utility
+int isGCodeLine(const char* line);
+int isdigit(int c);
+float stringToFloat(const char *str);
 
 
 #endif /* G_CODE_H_ */

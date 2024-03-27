@@ -20,7 +20,7 @@
 typedef struct {
 	char data[MESSAGE_SIZE];
 	uint8_t state;
-	uint8_t id;
+	uint16_t id;
 }Data_t;
 /*
  * Typedef
@@ -38,12 +38,7 @@ typedef enum
   BUF_FULL
 }Buf_Status_t;
 
-typedef enum
-{
-  BUF_RUNNING       = 0x00U,
-  BUF_PENDING,
-  BUF_STOPED
-}Job_Status_t;
+
 /*
  * Init the Buf
  */
@@ -55,7 +50,7 @@ HAL_StatusTypeDef Buf_Queue(Buf_Handler_t* buf,Data_t* ptr);
 /*
  * DeQueue Message to Buf
  */
-Data_t* Buf_Dequeue(Buf_Handler_t* buf);
+uint8_t Buf_Dequeue(Buf_Handler_t* buf,Data_t* rt);
 
 /*
  * peek next item

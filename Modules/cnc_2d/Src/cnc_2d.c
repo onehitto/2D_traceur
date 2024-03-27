@@ -8,13 +8,15 @@
 #include "cnc_2d.h"
 
 
-
+Sys_t sys;
 Step_Driver_Handler Motor1;
 Step_Driver_Handler Motor2;
 Servo_Handle_t servo;
 
 TIM_HandleTypeDef* htim_servo;
 TIM_HandleTypeDef* htim_step;
+
+
 
 void cnc_init(TIM_HandleTypeDef* htim_servo_p,TIM_HandleTypeDef* htim_step_p){
 
@@ -49,6 +51,12 @@ void cnc_init(TIM_HandleTypeDef* htim_servo_p,TIM_HandleTypeDef* htim_step_p){
 	htim_step = htim_step_p;
 	// init the servo motor , attach it to htim
 	Servo_Init(&servo, htim_servo);
+
+	sys.id_exe = 0;
+	sys.status = SYS_STOP;
+
+	G_Code_Init();
+	Com_Init();
 }
 
 
@@ -102,12 +110,12 @@ void Spycnc(void){
  **************************************************************************/
 void SpyServoMotor(void){
 	Data_t msg;
+	memset(&msg.data, '\0', MESSAGE_SIZE);
 	snprintf(msg.data,sizeof(msg.data),"<InfoServo>%d,%d,%lu,%lu,%lu\n",servo.Status,servo.curr_pos,servo.ptim->Instance->CCR1,servo.ptim->Init.Prescaler,servo.ptim->Init.Period);
 	if (HAL_OK != Com_Queue_msg(&msg))
 	{
 
 	}
-
 }
 
 /**************************************************************************
@@ -118,17 +126,32 @@ void SpyServoMotor(void){
  **************************************************************************/
 void SpyStepsMotor(void){
 	Data_t msg;
+	memset(&msg.data, '\0', MESSAGE_SIZE);
 	snprintf(msg.data,sizeof(msg.data),"<InfoM1>%d,%lu,%lu,%ld,%d,%d,%d,%d\n",Motor1.Status,Motor1.Steps_count,Motor1.tar_steps,Motor1.num_steps,Motor1.Conf.DIR,Motor1.Conf.MS1,Motor1.Conf.MS2,Motor1.Conf.MS3);
 	if (HAL_OK != Com_Queue_msg(&msg))
 	{
 
 	}
+	memset(&msg.data, '\0', MESSAGE_SIZE);
 	snprintf(msg.data,sizeof(msg.data),"<InfoM2>%d,%lu,%lu,%ld,%d,%d,%d,%d\n",Motor2.Status,Motor2.Steps_count,Motor2.tar_steps,Motor2.num_steps,Motor2.Conf.DIR,Motor2.Conf.MS1,Motor2.Conf.MS2,Motor2.Conf.MS3);
 	if (HAL_OK != Com_Queue_msg(&msg))
 	{
 
 	}
 
+}
+
+void SpyComErr(void){
+	Data_t msg;
+	snprintf(msg.data,sizeof(msg.data),"Com Error : %lu\n",errortosendqueue);
+	if (HAL_OK != Com_Queue_msg(&msg))
+	{
+
+	}
+}
+
+void SpyGcode_Stack(void){
+	// Spy the G code Queue Stack
 }
 /******************************************************************************************************************************************************************************************************************************
  * This section is about apply information received via USB
@@ -188,4 +211,3 @@ void CmdMove(Data_t ptr){
 	HAL_TIM_Base_Start_IT(htim_step);
 
 }
-

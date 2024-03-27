@@ -15,20 +15,16 @@
 #include "cnc_2d.h"
 #include "G_code.h"
 
-/*
- * Calibration
- */
-#define MAX_SIZE_MESSAGE 64
-#define MAX_MESSAGE_STACK  10
 
 /*
  * def
  */
 
 extern Buf_Handler_t Com_TXstorage;
-extern Buf_Handler_t Com_RXstorage;
 extern QueueHandle_t queueUSBtoCom;
 extern uint32_t errortosendqueue;
+
+extern uint32_t G_id;
 /*
  * Prototype fnc
  */
@@ -36,7 +32,7 @@ void Com_Init();
 HAL_StatusTypeDef Com_Queue_msg(Data_t * msg);
 void Com_Transmit();
 void Com_Receive();
-void Com_Assign();
+void Com_SendMsg(char * msg);
 
 
 

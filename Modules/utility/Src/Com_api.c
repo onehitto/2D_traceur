@@ -12,10 +12,9 @@
 
 
 Buf_Handler_t Com_TXstorage;
-Buf_Handler_t Com_RXstorage;
 QueueHandle_t queueUSBtoCom;
-uint32_t errortosendqueue;
-
+uint32_t errortosendqueue = 0;
+uint32_t G_id = 0;
 
 /**************************************************************************
  * @fn					- Com_Init
@@ -26,7 +25,7 @@ uint32_t errortosendqueue;
 void Com_Init(){
 
 	// init the Queue that transfer data from usb isr to the com
-	queueUSBtoCom = xQueueCreate(10, 64 * sizeof(uint8_t));
+	queueUSBtoCom = xQueueCreate(5, 64 * sizeof(uint8_t));
 
 	Buf_Init(&Com_TXstorage) ;
 	MX_USB_DEVICE_Init();
@@ -39,11 +38,15 @@ void Com_Init(){
  *
  **************************************************************************/
 void Com_Transmit(){
-	Data_t* ptr = NULL;
+	Data_t ptr;
 
 	while(Buf_IsEmpty(&Com_TXstorage) != BUF_EMPTY){
-		ptr = Buf_Dequeue(&Com_TXstorage);
-		while(CDC_Transmit_FS((uint8_t*) ptr->data, strlen(ptr->data)+1) != USBD_OK);
+		if (HAL_OK == Buf_Dequeue(&Com_TXstorage,&ptr))
+				while(CDC_Transmit_FS((uint8_t*) ptr.data, strlen(ptr.data)) != USBD_OK);
+	}
+	if (errortosendqueue != 0){
+		SpyComErr();
+		errortosendqueue = 0;
 	}
 }
 
@@ -70,18 +73,22 @@ HAL_StatusTypeDef Com_Queue_msg(Data_t * msg){
  **************************************************************************/
 void Com_Receive(){
 	Data_t ptr;
-	Data_t conf_ack = {.data = "Configuration Received",.id = 0 , .state = 0};
-	Data_t G_ack = {.data = "G code Received",.id = 0 , .state = 0};
-	Data_t cmd_ack = {.data = "Command Received",.id = 0 , .state = 0};
-	//if (strncmp((char*)buffer, "up:01", 6) == 0)
-	//	flag_data_received = 0;
+
 	while (pdPASS == xQueueReceive( queueUSBtoCom, &ptr.data, 0 )){
 		// check if the msg is request of info
 		if (strncmp((char*)ptr.data, "info", 4) == 0){
 			Spycnc();
 		}// check if the msg is a G code "Start with G"
 		else if (strncmp((char*)ptr.data, "G", 1) == 0){
-			Com_Queue_msg(&G_ack);
+			ptr.id = G_id;
+			ptr.state = PENDING ;
+			if (1 == isGCodeLine(ptr.data)){
+				if (HAL_OK == QUEUE_G_CODE(&ptr)){
+								G_id++;
+				}else
+					Com_SendMsg("No More Space !!\n");
+			}else
+				Com_SendMsg("Not G_code !!\n");
 		}// check if the msg is a execute code "Start with cmd"
 		else if (strncmp((char*)ptr.data, "cmd:", 4) == 0){
 			CmdMove(ptr);
@@ -93,18 +100,7 @@ void Com_Receive(){
 		}
 
 	}
-	/*
-	if (Buf_IsFull(&Com_RXstorage) != BUF_FULL && flag_data_received == 1 ){
-		memcpy(ptr.data,buffer,MAX_SIZE_MESSAGE);
-		flag_data_received = 0;
-		Buf_Queue(&Com_RXstorage,&ptr);
 
-	}
-	else if (Buf_IsFull(&Com_RXstorage) == BUF_FULL && flag_data_received == 1){
-				while(CDC_Transmit_FS((uint8_t*) "RX:Full\n", 8) != USBD_OK);
-				flag_data_received = 0;
-			}
-	*/
 }
 
 /**************************************************************************
@@ -113,13 +109,11 @@ void Com_Receive(){
  * @Note				- assign the message to the right buffer Job_stack/G_code_stack
  *
  **************************************************************************/
-void Com_Assign(){
-	Data_t* ptr = NULL;
-	while(Buf_IsEmpty(&Com_RXstorage) != BUF_EMPTY && Buf_IsFull(&Job_Stack) != BUF_FULL){
-			ptr = Buf_Dequeue(&Com_RXstorage);
-			ptr->state = BUF_PENDING;
-			Queue_Job(ptr);
-		}
+void Com_SendMsg(char * msg){
+	Data_t ptr;
+	memcpy(ptr.data,msg,strlen(msg)+1);
+	if (HAL_OK != Com_Queue_msg(&ptr))
+	{
+
+	}
 }
-
-

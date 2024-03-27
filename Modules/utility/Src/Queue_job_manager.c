@@ -59,6 +59,7 @@ HAL_StatusTypeDef Buf_Queue(Buf_Handler_t* buf,Data_t* ptr){
 	}else{
 		buf->front = (buf->front+1) % BUF_SIZE ;
 	}
+	memset(&buf->data[buf->front].data, '\0', MESSAGE_SIZE);
 	memcpy(&buf->data[buf->front],ptr,sizeof(Data_t));
 	xSemaphoreGive(buf->mutex);
 	return HAL_OK;
@@ -73,21 +74,26 @@ HAL_StatusTypeDef Buf_Queue(Buf_Handler_t* buf,Data_t* ptr){
  * @Note				- None
  *
  **************************************************************************/
-Data_t* Buf_Dequeue(Buf_Handler_t* buf){
+uint8_t Buf_Dequeue(Buf_Handler_t* buf,Data_t* rt){
 	xSemaphoreTake(buf->mutex,TIMEOUT_1MS);
 	if (Buf_IsEmpty(buf) == BUF_EMPTY ){
 		xSemaphoreGive(buf->mutex);
-		return NULL;
+		return HAL_ERROR;
 	}
-	static Data_t rt;
-	memcpy(&rt,&(buf->data[buf->rear]),sizeof(Data_t));
+	memset(rt->data, '\0', MESSAGE_SIZE);
+
+    // If the buffer is not empty, copy the data from the buffer to the provided 'rt' location.
+    memcpy(rt, &(buf->data[buf->rear]), sizeof(Data_t));
+
+    // Clear the dequeued spot in the buffer.
+    memset(buf->data[buf->rear].data, '\0', MESSAGE_SIZE);
 	if (buf->front == buf->rear){
 		buf->front = buf->rear = -1;
 	}else {
 		buf->rear = (buf->rear + 1) % BUF_SIZE;
 	}
 	xSemaphoreGive(buf->mutex);
-	return &rt ;
+	return HAL_OK;
 }
 /*
  * Buf_IsFull

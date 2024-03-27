@@ -31,7 +31,7 @@ TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim4;
 osThreadId defaultTaskHandle;
 osThreadId ComTaskHandle;
-
+uint8_t falling = 0 ;
 /* Private variables 2D traceur ----------------------------------------------*/
 
 
@@ -71,14 +71,12 @@ int main(void)
   /* USER CODE END RTOS_TIMERS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
-  Com_Init();
   cnc_init(&htim2,&htim4);
-  G_Code_Init();
   /* USER CODE END RTOS_QUEUES */
   HAL_Delay(10);
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
+  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 256);
   osThreadDef(ComTask, StartComTask, osPriorityNormal, 0, 256);
 
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
@@ -267,7 +265,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15|GPIO_PIN_13, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15, GPIO_PIN_RESET);
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6
                           |GPIO_PIN_7|GPIO_PIN_12, GPIO_PIN_RESET);
@@ -276,12 +274,6 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6
                           |GPIO_PIN_7|GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_3, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : PC15 */
-  GPIO_InitStruct.Pin = GPIO_PIN_15|GPIO_PIN_13;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PB11 PB15 */
     GPIO_InitStruct.Pin = GPIO_PIN_15|GPIO_PIN_11;
@@ -295,24 +287,22 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6
                           |GPIO_PIN_7|GPIO_PIN_12;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-
 
   /*Configure GPIO pins : PB15 PB4 PB5 PB6
                            PB7 PB8 PB9 */
   GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6
                           |GPIO_PIN_7|GPIO_PIN_8|GPIO_PIN_9;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PB0 PB1 */
     GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1;
-    GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
@@ -338,76 +328,18 @@ static void MX_GPIO_Init(void)
 /* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void const * argument)
 {
-  //uint8_t timflag = 0;
-  //uint8_t test = 0;
-  //uint8_t steptoggle = 1;
-
-
-  for(;;)
-  {
-	  /*
-	  if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == GPIO_PIN_RESET && timflag == 0){
-
-		  timflag = 1;
-		  steptoggle = 0;
-		  test++ ;
-		  }
-
-	  if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == GPIO_PIN_SET && timflag == 1){
-	  		  timflag = 0;
-	  		  }
-
-	  if (test == 1 && steptoggle == 0 && Motor1.Status == ST_OFF && Motor2.Status == ST_OFF){
-		  Motor1.Conf.DIR = 1;
-		  Motor2.Conf.DIR = 0;
-		  StM_Conf_Init(&Motor1);
-		  StM_Conf_Init(&Motor2);
-
-		  GoToStep(&Motor1,100,10);
-		  GoToStep(&Motor2,100,10);
-		  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-		  HAL_TIM_Base_Start_IT(&htim4);
-		  steptoggle = 1;
-	  }else if (test == 2 && steptoggle == 0 && Motor1.Status == ST_OFF && Motor2.Status == ST_OFF){
-		  Motor1.Conf.DIR = 0;
-		  Motor2.Conf.DIR = 1;
-		  StM_Conf_Init(&Motor1);
-		  StM_Conf_Init(&Motor2);
-
-		  GoToStep(&Motor1,100,10);
-		  GoToStep(&Motor2,100,10);
-		  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-		  HAL_TIM_Base_Start_IT(&htim4);
-		  steptoggle = 1;
-	  }else if (test == 3 && steptoggle == 0 && Motor1.Status == ST_OFF && Motor2.Status == ST_OFF){
-		  Motor1.Conf.DIR = 0;
-		  Motor2.Conf.DIR = 0;
-		  StM_Conf_Init(&Motor1);
-		  StM_Conf_Init(&Motor2);
-
-		  GoToStep(&Motor1,100,10);
-		  GoToStep(&Motor2,100,10);
-		  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-		  HAL_TIM_Base_Start_IT(&htim4);
-		  steptoggle = 1;
-	  }else if (test == 4 && steptoggle == 0 && Motor1.Status == ST_OFF && Motor2.Status == ST_OFF){
-
-		  Motor1.Conf.DIR = 1;
-		  Motor2.Conf.DIR = 1;
-		  StM_Conf_Init(&Motor1);
-		  StM_Conf_Init(&Motor2);
-
-		  GoToStep(&Motor1,100,10);
-		  GoToStep(&Motor2,100,10);
-		  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-		  HAL_TIM_Base_Start_IT(&htim4);
-		  steptoggle = 1;
-	  }else if (test == 5) {
-		  test = 0;
-	  }
-	*/
-	osDelay(10);
-  }
+	Data_t ptr ;
+	for(;;)
+	{
+		if (sys.status == SYS_STOP && Buf_IsEmpty(&Gcode_Stack) != BUF_EMPTY){
+			DEQUEUE_G_CODE(&ptr);
+			/*sys.status = SYS_RUNNING;
+			ptr->state = RUNNING;
+			sys.id_exe = ptr->id;*/
+			GCode_Parser(&ptr);
+		}
+		osDelay(50);
+	}
   /* USER CODE END 5 */
 }
 
@@ -422,12 +354,10 @@ void StartComTask(void const * argument){
 
 	for(;;)
 	  {
-
-			osDelay(5);
+			osDelay(10);
 			Com_Transmit();
 			Com_Receive();
-			//Com_Assign();
-		}
+	  }
 }
 
 /**
@@ -464,7 +394,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   * @retval None
   */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
-
+	if (GPIO_Pin == GPIO_PIN_0)
+		falling++;
 }
 
 /**
