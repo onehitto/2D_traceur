@@ -380,6 +380,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	  }else{
 		  switch (sys.Move){
 		  	  case LINEAR:
+		  		Motor1.Status = ST_ORDER;
+		  		Motor2.Status = ST_ORDER;
 		  		  move_line_callback();
 		  		  break;
 		  	  case ARC:
@@ -390,8 +392,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		  		  break;
 		  	  case STOP:
 		  		  HAL_TIM_Base_Stop_IT(&htim4);
+		  		  Motor1.Status = ST_OFF;
+		  		  Motor2.Status = ST_OFF;
+		  		  Motor1.Steps_count = 0;
+		  		  Motor2.Steps_count = 0;
 		  		  sys.status = SYS_STOP;
 		  		  sys.num_event = 0;
+
 		  		  break;
 		  	  default:
 		  		  break;

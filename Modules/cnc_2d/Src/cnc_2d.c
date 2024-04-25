@@ -303,6 +303,7 @@ void CmdMove(Data_t ptr){
 	StM_Conf_Dir(&Motor1);
 	StM_Conf_Dir(&Motor2);
 	sys.Move = CMD;
+	sys.status = SYS_RUNNING;
 	sys.num_event = 0;
 	HAL_TIM_Base_Start_IT(htim_step);
 
