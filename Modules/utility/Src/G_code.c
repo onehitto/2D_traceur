@@ -8,16 +8,21 @@
 #include "G_code.h"
 
 
+gc_block_t gc_block;
+
+gc_state_t gc_state;
+
 Buf_Handler_t Gcode_Stack;
 
-union{
-	uint32_t d;
-	float f;
-}t;
-float x;
-
 void G_Code_Init(){
-	Buf_Init(&Gcode_Stack);
+    // init the blocks and sys_parm
+
+    memset(&gc_state,0,sizeof(gc_state_t));
+    memset(&gc_block,0,sizeof(gc_block_t));
+
+    Buf_Init(&Gcode_Stack);
+
+    Com_SendMsg("G_Code Init ... \n");
 }
 
 // Function to verify if a line is a G-Code line
@@ -70,46 +75,147 @@ int isdigit(int c) {
 
 void GCode_Parser(Data_t* G_Code) {
 
-	int8_t idx = 1;
-	switch(G_Code->data[idx]){
-		case('1'):
-				G1_Parser(G_Code);
-				break;
-		default:
-			Com_SendMsg("G_Code not supported !!\n");
-	}
+	gc_execute_line(G_Code->data);
 
 }
-void G1_Parser(Data_t* G_Code) {
-	char cpy_line[64];
-	memcpy(cpy_line,G_Code->data,64);
-	char* token = strtok(cpy_line, " ");
-	Data_t msg;
 
-	token = strtok(NULL, " ");
-	while (token != NULL){
-		switch(token[0]){
-			case('X'):
 
-				x = stringToFloat(&token[1]);
-				t.f = x;
-				snprintf(msg.data,sizeof(msg.data),"X: %lu\n",t.d);
-				Com_Queue_msg(&msg);
+uint8_t gc_execute_line(char *line){
 
-				break;
-			case('Y'):
-				x = stringToFloat(&token[1]);
-				t.f = sqrt(x);
-				snprintf(msg.data,sizeof(msg.data),"X: %lu\n",t.d);
-				Com_Queue_msg(&msg);
-				break;
-			default:
-				;
-		}
-		token = strtok(NULL, " ");
-	}
+    memset(&gc_block, 0, sizeof(gc_block_t));
+    uint8_t char_counter = 0;
+    uint8_t int_value;
+    uint8_t letter;
+    float value;
+    //parsing a G code and store the value in approriate structure
+    //  motion : G0/G1/G2/G3
+
+    while (line[char_counter] != 0){
+      if  (line[char_counter] == ' ')
+        char_counter++;
+      else{
+          letter = line[char_counter];
+          char_counter++;
+          read_float(line, &char_counter, &value);
+          int_value = trunc(value);
+          switch (letter){
+            case ('G'):
+                switch (int_value)
+                {
+                case 0: case 1:
+                  gc_block.modal.motion = MODAL_G1;
+                    break;
+                case 2:
+                  gc_block.modal.motion = MODAL_G2;
+                    break;
+                case 3:
+                  gc_block.modal.motion = MODAL_G3;
+                    break;
+                case 43:
+                  gc_block.modal.motion = MODAL_G43;
+                  break;
+                case 49:
+                  gc_block.modal.motion = MODAL_G49;
+                  break;
+                default:
+                    break;
+                }
+                break;
+            case 'M':
+              break;
+            case 'F':gc_block.values.f = value; break;
+            case 'I':gc_block.values.ijk[X_AXIS] = value;break;
+            case 'J':gc_block.values.ijk[Y_AXIS] = value;break;
+            case 'K':gc_block.values.ijk[Z_AXIS] = value;break;
+            case 'R':gc_block.values.r= value;break;
+            case 'X':gc_block.values.xyz[X_AXIS] = value;break;
+            case 'Y':gc_block.values.xyz[Y_AXIS] = value;break;
+            case 'Z':gc_block.values.xyz[Z_AXIS] = value;break;
+            default:
+                printf("Not recognized \n");
+                break;
+            }
+        }
+    }
+    // parsing completed
+    switch (gc_block.modal.motion)
+    {
+    case MODAL_G0:case MODAL_G1:
+    		float x0 = gc_state.coord_sys[X_AXIS];
+    		float y0 = gc_state.coord_sys[Y_AXIS];
+    		//float z0 = gc_state.coord_sys[Z_AXIS];
+
+    		float x1 = gc_block.values.xyz[X_AXIS];
+    		float y1 = gc_block.values.xyz[Y_AXIS];
+    		//float z1 = gc_block.values.xyz[Z_AXIS];
+    		// store xyz sys coordinate to previous coordinate
+    		gc_state.coord_sys_prev[X_AXIS] = x0;
+    		gc_state.coord_sys_prev[Y_AXIS] = y0;
+    		//gc_state.coord_sys_prev[Z_AXIS] = z0;
+
+    		int  max_step = 0;
+    		float xInc, yInc,m,b,cal_save;
+    		// check if x0 == x1 Yinc++ else if y1 == y0 xInc else
+    		if (x0 == x1){
+    			//Y ++/--
+    			yInc = (y1 > y0) ? RESOLUTION_MN_XY : -RESOLUTION_MN_XY;
+    			xInc = 0;
+    			//a voir
+    			Motor1.Conf.DIR = (yInc > 0) ? ST_CLOCKWISE: ST_ANTICLOCKWISE;
+				Motor2.Conf.DIR = (yInc > 0) ? ST_CLOCKWISE: ST_ANTICLOCKWISE;
+				StM_Conf_Dir(&Motor1);
+				StM_Conf_Dir(&Motor2);
+    		}else if (y0 == y1){
+    			//X ++/--
+    			xInc = (x1 > x0) ? RESOLUTION_MN_XY : -RESOLUTION_MN_XY;
+    			yInc = 0;
+    			//a voir
+    			Motor1.Conf.DIR = (xInc > 0) ? ST_CLOCKWISE: ST_ANTICLOCKWISE;
+				Motor2.Conf.DIR = (xInc > 0) ? ST_ANTICLOCKWISE: ST_CLOCKWISE;
+				StM_Conf_Dir(&Motor1);
+				StM_Conf_Dir(&Motor2);
+    		}else{
+    			m = (y1 - y0)/(x1 - x0);
+    			b = y0 - m * x0;
+    			cal_save = 1 / sqrt(m*m + 1);
+    			xInc = (x1 > x0) ? RESOLUTION_MN_XY : -RESOLUTION_MN_XY;
+				yInc = (y1 > y0) ? RESOLUTION_MN_XY : -RESOLUTION_MN_XY;
+				sys.xInc_d = (x1 > x0) ? RESOLUTION_MN_DIAG : -RESOLUTION_MN_DIAG;
+				sys.yInc_d = (y1 > y0) ? RESOLUTION_MN_DIAG : -RESOLUTION_MN_DIAG;
+    		}
+    		// calculate the m/ b ( 0= mx -y +b) of the interpolation (x0,y0) (x1,y1)
+    		//  m = (y1 - y0)/(x1 - x0)
+    		//  b = y0 - m * x0
+    		// the distance between the point x,y and the line is fabs( m * x - y + b) / sqrt(m*m + 1)
+
+			// update the SYS variables
+			sys.status = SYS_RUNNING;
+			sys.num_event = 0;
+			sys.m = m;
+			sys.b = b;
+			sys.cal_save = cal_save;
+			sys.xInc = xInc;
+			sys.yInc = yInc;
+			sys.max_step = max_step;
+			sys.Move = LINEAR;
+			HAL_TIM_Base_Start_IT(htim_step);
+
+    	break;
+    case MODAL_G2:case MODAL_G3:
+        //
+        break;
+    case MODAL_G43:
+        gc_state.tool_length_offset = gc_block.values.xyz[Z_AXIS];
+      break;
+    case MODAL_G49:
+        gc_state.tool_length_offset = 0;
+      break;
+    default:
+      break;
+    }
+
+    return 1 ;
 }
-
 
 float stringToFloat(const char *str) {
     float result = 0.0;
@@ -135,3 +241,79 @@ float stringToFloat(const char *str) {
 
     return result;
 }
+
+uint8_t read_float(char *line, uint8_t *char_counter, float *float_ptr)
+{
+  char *ptr = line + *char_counter;
+  unsigned char c;
+
+  // Grab first character and increment pointer. No spaces assumed in line.
+  c = *ptr++;
+
+  // Capture initial positive/minus character
+  bool isnegative = false;
+  if (c == '-') {
+    isnegative = true;
+    c = *ptr++;
+  } else if (c == '+') {
+    c = *ptr++;
+  }
+
+  // Extract number into fast integer. Track decimal in terms of exponent value.
+  uint32_t intval = 0;
+  int8_t exp = 0;
+  uint8_t ndigit = 0;
+  bool isdecimal = false;
+  while(1) {
+    c -= '0';
+    if (c <= 9) {
+      ndigit++;
+      if (ndigit <= MAX_INT_DIGITS) {
+        if (isdecimal) { exp--; }
+        intval = (((intval << 2) + intval) << 1) + c; // intval*10 + c
+      } else {
+        if (!(isdecimal)) { exp++; }  // Drop overflow digits
+      }
+    } else if (c == (('.'-'0') & 0xff)  &&  !(isdecimal)) {
+      isdecimal = true;
+    } else {
+      break;
+    }
+    c = *ptr++;
+  }
+
+  // Return if no digits have been read.
+  if (!ndigit) { return(false); };
+
+  // Convert integer into floating point.
+  float fval;
+  fval = (float)intval;
+
+  // Apply decimal. Should perform no more than two floating point multiplications for the
+  // expected range of E0 to E-4.
+  if (fval != 0) {
+    while (exp <= -2) {
+      fval *= 0.01;
+      exp += 2;
+    }
+    if (exp < 0) {
+      fval *= 0.1;
+    } else if (exp > 0) {
+      do {
+        fval *= 10.0;
+      } while (--exp > 0);
+    }
+  }
+
+  // Assign floating point value with correct sign.
+  if (isnegative) {
+    *float_ptr = -fval;
+  } else {
+    *float_ptr = fval;
+  }
+
+  *char_counter = ptr - line - 1; // Set char_counter to next statement
+
+  return(true);
+}
+

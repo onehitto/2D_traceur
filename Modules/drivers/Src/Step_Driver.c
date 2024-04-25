@@ -9,6 +9,7 @@
 
 #include "Step_Driver.h"
 
+
 void StM_Pin_Conf(Step_Driver_Handler * Motor1,Step_Driver_Handler * Motor2){
 
 	// pin B9 en
@@ -50,6 +51,7 @@ void StM_Pin_Conf(Step_Driver_Handler * Motor1,Step_Driver_Handler * Motor2){
 	// pin A4 Step
 	Motor2->Pins.port_STEP = GPIOA;
 	Motor2->Pins.pin_STEP = GPIO_PIN_4;
+
 
 }
 
@@ -118,7 +120,8 @@ void StM_Conf_Dir(Step_Driver_Handler * Motor){
 	// pin DIR
 		HAL_GPIO_WritePin(Motor->Pins.port_DIR, Motor->Pins.pin_DIR, Motor->Conf.DIR);
 }
-void GoToStep(Step_Driver_Handler * Motor,uint16_t tar_Step,uint8_t acc)
+
+void GoToStep(Step_Driver_Handler * Motor,uint16_t tar_Step)
 {
 	if (Motor->Status == ST_OFF){
 		Motor->Status = ST_ORDER;
@@ -126,15 +129,19 @@ void GoToStep(Step_Driver_Handler * Motor,uint16_t tar_Step,uint8_t acc)
 	}
 }
 
-void STM_Step(Step_Driver_Handler* Motor){
+void STM_Step_High(Step_Driver_Handler* Motor){
 
-	HAL_GPIO_TogglePin(Motor->Pins.port_STEP, Motor->Pins.pin_STEP);
-	if (HAL_GPIO_ReadPin(Motor->Pins.port_STEP, Motor->Pins.pin_STEP) == GPIO_PIN_SET){
-		Motor->Steps_count++;
-		if (Motor->Conf.DIR == 1)
-			Motor->num_steps++;
-		else
-			Motor->num_steps--;
-	}
+	HAL_GPIO_WritePin(Motor->Pins.port_STEP, Motor->Pins.pin_STEP,GPIO_PIN_SET);
+	Motor->Steps_count++;
+	if (Motor->Conf.DIR == 1)
+		Motor->num_steps++;
+	else
+		Motor->num_steps--;
 
 }
+
+void STM_Step_Low(Step_Driver_Handler* Motor){
+
+	HAL_GPIO_WritePin(Motor->Pins.port_STEP, Motor->Pins.pin_STEP,GPIO_PIN_RESET);
+}
+

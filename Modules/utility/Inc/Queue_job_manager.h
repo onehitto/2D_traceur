@@ -22,6 +22,14 @@ typedef struct {
 	uint8_t state;
 	uint16_t id;
 }Data_t;
+
+typedef enum
+{
+	PENDING       = 0x00U,
+	RUNNING,
+	PAUSED
+}Job_state_t;
+
 /*
  * Typedef
  */

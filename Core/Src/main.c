@@ -333,9 +333,6 @@ void StartDefaultTask(void const * argument)
 	{
 		if (sys.status == SYS_STOP && Buf_IsEmpty(&Gcode_Stack) != BUF_EMPTY){
 			DEQUEUE_G_CODE(&ptr);
-			/*sys.status = SYS_RUNNING;
-			ptr->state = RUNNING;
-			sys.id_exe = ptr->id;*/
 			GCode_Parser(&ptr);
 		}
 		osDelay(50);
@@ -377,12 +374,31 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   if (htim->Instance == TIM4) {
-	  cnc_DriveM_TIMcallback(&Motor1);
-	  cnc_DriveM_TIMcallback(&Motor2);
-	  if (Motor1.Status == ST_OFF && Motor2.Status == ST_OFF)
-		  HAL_TIM_Base_Stop_IT(&htim4);
+	  if (sys.num_event % 2 == 0){
+		  STM_Step_Low(&Motor1);
+		  STM_Step_Low(&Motor2);
+	  }else{
+		  switch (sys.Move){
+		  	  case LINEAR:
+		  		  move_line_callback();
+		  		  break;
+		  	  case ARC:
+		  	  		  break;
+		  	  case CMD:
+		  		  cnc_DriveM_TIMcallback(&Motor1);
+		  		  cnc_DriveM_TIMcallback(&Motor2);
+		  		  break;
+		  	  case STOP:
+		  		  HAL_TIM_Base_Stop_IT(&htim4);
+		  		  sys.status = SYS_STOP;
+		  		  sys.num_event = 0;
+		  		  break;
+		  	  default:
+		  		  break;
+		  	  }
 	  }
-
+	  sys.num_event ++;
+  }
   /* USER CODE BEGIN Callback 1 */
 
   /* USER CODE END Callback 1 */
